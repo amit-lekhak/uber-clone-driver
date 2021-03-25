@@ -4,7 +4,7 @@ class EarningsTabPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text("This is a profile tab page"),
+      child: Text("This is a Earnings tab page"),
     );
   }
 }
