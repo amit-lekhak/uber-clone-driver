@@ -1,3 +1,5 @@
+import 'package:driver_app/AllScreens/carInfoScreen.dart';
+import 'package:driver_app/configMaps.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
@@ -201,11 +203,14 @@ class RegistrationScreen extends StatelessWidget {
         "phone": phoneTextEditingController.text.trim()
       };
 
-      usersRef.child(firebaseUser.uid).set(userDataMap);
+      driversRef.child(firebaseUser.uid).set(userDataMap);
+
+      currentFirebaseUser = firebaseUser;
+
       displayToastMessage(
           "Congratulations your account has been created", context);
-      Navigator.pushNamedAndRemoveUntil(
-          context, MainScreen.idScreen, (route) => false);
+
+      Navigator.pushNamed(context, CarInfoScreen.idScreen);
     } else {
       Navigator.pop(context);
 

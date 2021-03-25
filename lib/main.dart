@@ -1,3 +1,4 @@
+import 'package:driver_app/AllScreens/carInfoScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -17,6 +18,9 @@ void main() async {
 DatabaseReference usersRef =
     FirebaseDatabase.instance.reference().child("users");
 
+DatabaseReference driversRef =
+    FirebaseDatabase.instance.reference().child("drivers");
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -29,13 +33,15 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: FirebaseAuth.instance.currentUser == null
-            ? LoginScreen.idScreen
-            : MainScreen.idScreen,
+        // initialRoute: FirebaseAuth.instance.currentUser == null
+        //     ? LoginScreen.idScreen
+        //     : MainScreen.idScreen,
+        initialRoute: RegistrationScreen.idScreen,
         routes: {
           RegistrationScreen.idScreen: (context) => RegistrationScreen(),
           LoginScreen.idScreen: (context) => LoginScreen(),
           MainScreen.idScreen: (context) => MainScreen(),
+          CarInfoScreen.idScreen: (context) => CarInfoScreen(),
         },
       ),
     );
