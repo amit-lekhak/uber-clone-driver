@@ -5,7 +5,6 @@ import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:driver_app/AllScreens/loginScreen.dart';
-import 'package:driver_app/AllScreens/mainScreen.dart';
 import 'package:driver_app/AllWidgets/progressDialog.dart';
 import 'package:driver_app/main.dart';
 

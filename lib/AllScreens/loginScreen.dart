@@ -1,3 +1,4 @@
+import 'package:driver_app/configMaps.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import "package:flutter/material.dart";
@@ -144,15 +145,19 @@ class LoginScreen extends StatelessWidget {
                 password: passwordTextEditingController.text)
             .catchError((errMsg) {
       Navigator.pop(context);
+
       displayToastMessage("Error " + errMsg.toString(), context);
     }))
         .user;
 
     if (firebaseUser != null) {
-      usersRef.child(firebaseUser.uid).once().then((DataSnapshot snap) {
+      driversRef.child(firebaseUser.uid).once().then((DataSnapshot snap) {
         if (snap.value != null) {
+          currentFirebaseUser = firebaseUser;
+
           Navigator.pushNamedAndRemoveUntil(
               context, MainScreen.idScreen, (route) => false);
+
           displayToastMessage("You are logged in", context);
         } else {
           Navigator.pop(context);

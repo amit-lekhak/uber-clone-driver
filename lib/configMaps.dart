@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:driver_app/Models/allUsers.dart';
+import 'package:geolocator/geolocator.dart';
 
 const String mapKey = "AIzaSyAD8_JmEJ9RnwHUp2woLVw9Fyk3B_V2FhU";
 const String mapBoxKey =
@@ -10,3 +13,6 @@ User firebaseUser;
 Users userCurrentInfo;
 
 User currentFirebaseUser;
+
+StreamSubscription<Position> homeTabPageStreamSubscription;
+

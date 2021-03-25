@@ -3,15 +3,14 @@ import 'package:driver_app/AllScreens/registrationScreen.dart';
 import 'package:driver_app/configMaps.dart';
 import 'package:driver_app/main.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CarInfoScreen extends StatelessWidget {
-  static const String idScreen = "carInfo";
+ static final String idScreen = "carInfo";
 
-  TextEditingController carModelTextEditingController = TextEditingController();
-  TextEditingController carNumberTextEditingController =
+ final TextEditingController carModelTextEditingController = TextEditingController();
+ final TextEditingController carNumberTextEditingController =
       TextEditingController();
-  TextEditingController carColorTextEditingController = TextEditingController();
+ final TextEditingController carColorTextEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
