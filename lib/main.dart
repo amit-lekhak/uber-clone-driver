@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         // initialRoute: FirebaseAuth.instance.currentUser == null
         //     ? LoginScreen.idScreen
         //     : MainScreen.idScreen,
-        initialRoute: RegistrationScreen.idScreen,
+        initialRoute:MainScreen.idScreen,
         routes: {
           RegistrationScreen.idScreen: (context) => RegistrationScreen(),
           LoginScreen.idScreen: (context) => LoginScreen(),
