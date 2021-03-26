@@ -29,6 +29,9 @@ DatabaseReference rideRequestRef = FirebaseDatabase.instance
     .child(currentFirebaseUser.uid)
     .child("newRide");
 
+DatabaseReference newRequestsRef =
+    FirebaseDatabase.instance.reference().child("Ride Requests");
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
