@@ -159,6 +159,8 @@ class _HomeTabPageState extends State<HomeTabPage> {
     Geofire.setLocation(currentFirebaseUser.uid, currentPosition.latitude,
         currentPosition.longitude);
 
+    rideRequestRef.set("searching");
+
     rideRequestRef.onValue.listen((event) {});
   }
 

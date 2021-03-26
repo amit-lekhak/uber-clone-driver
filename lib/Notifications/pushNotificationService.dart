@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:driver_app/Models/rideDetails.dart';
 import 'package:driver_app/Notifications/notificationDialog.dart';
 import 'package:driver_app/configMaps.dart';
@@ -56,6 +57,9 @@ class PushNotificationService {
         .once()
         .then((DataSnapshot dataSnapshot) {
       if (dataSnapshot != null && dataSnapshot.value != null) {
+        assetsAudioPlayer.open(Audio("sounds/alert.mp3"));
+        assetsAudioPlayer.play();
+
         double pickUpLat =
             double.parse(dataSnapshot.value["pickup"]["latitude"].toString());
 
@@ -88,7 +92,9 @@ class PushNotificationService {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (BuildContext context) => NotificationDialog(rideDetails: rideDetails,),
+          builder: (BuildContext context) => NotificationDialog(
+            rideDetails: rideDetails,
+          ),
         );
       }
     });
