@@ -2,25 +2,27 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:driver_app/Models/rideDetails.dart';
+import 'package:driver_app/Notifications/notificationDialog.dart';
 import 'package:driver_app/configMaps.dart';
 import 'package:driver_app/main.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PushNotificationService {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
 
-  Future initialize() async {
+  Future initialize(BuildContext context) async {
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        retrieveRideRequestInfo(getRideRequestId(message));
+        retrieveRideRequestInfo(getRideRequestId(message), context);
       },
       onLaunch: (Map<String, dynamic> message) async {
-        retrieveRideRequestInfo(getRideRequestId(message));
+        retrieveRideRequestInfo(getRideRequestId(message), context);
       },
       onResume: (Map<String, dynamic> message) async {
-        retrieveRideRequestInfo(getRideRequestId(message));
+        retrieveRideRequestInfo(getRideRequestId(message), context);
       },
     );
   }
@@ -48,13 +50,12 @@ class PushNotificationService {
     return rideRequesterId;
   }
 
-  void retrieveRideRequestInfo(String rideRequesterId) {
+  void retrieveRideRequestInfo(String rideRequesterId, BuildContext context) {
     newRequestsRef
         .child(rideRequesterId)
         .once()
         .then((DataSnapshot dataSnapshot) {
       if (dataSnapshot != null && dataSnapshot.value != null) {
-        
         double pickUpLat =
             double.parse(dataSnapshot.value["pickup"]["latitude"].toString());
 
@@ -75,14 +76,20 @@ class PushNotificationService {
         String paymentMethod = dataSnapshot.value["payment_method"].toString();
 
         RideDetails rideDetails = RideDetails();
-        rideDetails.ride_request_id = rideRequesterId;
-        rideDetails.pickup_address = pickUpAddress;
-        rideDetails.dropoff_address = dropOffAddress;
-        rideDetails.pickup = LatLng(pickUpLat, pickUpLng);
-        rideDetails.dropoff = LatLng(dropOffLat, dropOffLng);
-        rideDetails.payment_method = paymentMethod;
+        rideDetails.rideRequestId = rideRequesterId;
+        rideDetails.pickUpAddress = pickUpAddress;
+        rideDetails.dropOffAddress = dropOffAddress;
+        rideDetails.pickUp = LatLng(pickUpLat, pickUpLng);
+        rideDetails.dropOff = LatLng(dropOffLat, dropOffLng);
+        rideDetails.paymentMethod = paymentMethod;
 
         log("Pick Add $pickUpAddress \n Drop Add $dropOffAddress ");
+
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) => NotificationDialog(rideDetails: rideDetails,),
+        );
       }
     });
   }

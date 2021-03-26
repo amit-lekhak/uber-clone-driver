@@ -41,6 +41,7 @@ dependencies:
   animated_text_kit:
   flutter_geofire:
   firebase_messaging:
+  assets_audio_player:
 
 dev_dependencies:
   flutter_test:
