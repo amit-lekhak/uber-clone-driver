@@ -22,7 +22,6 @@ class _HomeTabPageState extends State<HomeTabPage> {
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
   GoogleMapController newGoogleMapController;
 
-  Position currentPosition;
 
   String driverStatusText = "Offline Now - Go Online  ";
   Color driverStatusColor = Colors.black;
