@@ -7,17 +7,16 @@ class RideDetails {
   LatLng dropOff;
   String rideRequestId;
   String paymentMethod;
-  // String rider_name;
-  // String rider_phone;
+  String riderName;
+  String riderPhone;
 
-  RideDetails({
-    this.dropOff,
-    this.dropOffAddress,
-    this.paymentMethod,
-    this.pickUp,
-    this.pickUpAddress,
-    this.rideRequestId,
-    // this.rider_name,
-    // this.rider_phone,
-  });
+  RideDetails(
+      {this.dropOff,
+      this.dropOffAddress,
+      this.paymentMethod,
+      this.pickUp,
+      this.pickUpAddress,
+      this.rideRequestId,
+      this.riderName,
+      this.riderPhone});
 }

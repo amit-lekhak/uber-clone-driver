@@ -200,7 +200,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Amit Lekhak",
+                          widget.rideDetails.riderName,
                           style: TextStyle(
                             fontFamily: "Brand Bold",
                             fontSize: 24.0,
@@ -228,7 +228,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
                         Expanded(
                           child: Container(
                             child: Text(
-                              "18-mnr,nepal",
+                              widget.rideDetails.pickUpAddress,
                               style: TextStyle(
                                 fontSize: 18.0,
                               ),
@@ -254,7 +254,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
                         Expanded(
                           child: Container(
                             child: Text(
-                              "20-mnr,nepal",
+                              widget.rideDetails.dropOffAddress,
                               style: TextStyle(
                                 fontSize: 18.0,
                               ),
@@ -486,6 +486,12 @@ class _NewRideScreenState extends State<NewRideScreen> {
     };
 
     newRequestsRef.child(rideRequesterId).child("driver_location").set(locMap);
+
+    driversRef
+        .child(currentFirebaseUser.uid)
+        .child("history")
+        .child(rideRequesterId)
+        .set(true);
   }
 
   void updateRideDetails() async {
