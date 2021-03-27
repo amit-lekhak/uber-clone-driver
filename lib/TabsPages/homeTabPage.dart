@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:driver_app/AllScreens/registrationScreen.dart';
+import 'package:driver_app/Models/drivers.dart';
 import 'package:driver_app/Notifications/pushNotificationService.dart';
 import 'package:driver_app/configMaps.dart';
 import 'package:driver_app/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:geolocator/geolocator.dart';
@@ -21,7 +23,6 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
   GoogleMapController newGoogleMapController;
-
 
   String driverStatusText = "Offline Now - Go Online  ";
   Color driverStatusColor = Colors.black;
@@ -53,6 +54,18 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
   void getCurrentDdriverInfo() {
     currentFirebaseUser = FirebaseAuth.instance.currentUser;
+
+    driversRef
+        .child(currentFirebaseUser.uid)
+        .once()
+        .then((DataSnapshot dataSnapshot) {
+
+      if (dataSnapshot.value != null) {
+        driversInformation = Drivers.fronSnapshot(dataSnapshot);
+      }
+      
+    });
+
     PushNotificationService pushNotificationService = PushNotificationService();
 
     pushNotificationService.initialize(context);

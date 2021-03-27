@@ -4,6 +4,7 @@ import 'package:driver_app/AllWidgets/progressDialog.dart';
 import 'package:driver_app/Assistants/assistantMethods.dart';
 import 'package:driver_app/Models/rideDetails.dart';
 import 'package:driver_app/configMaps.dart';
+import 'package:driver_app/main.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -31,6 +32,13 @@ class _NewRideScreenState extends State<NewRideScreen> {
   PolylinePoints polylinePoints = PolylinePoints();
 
   double mapBottomPadding = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    acceptRideRequest();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -314,5 +322,34 @@ class _NewRideScreenState extends State<NewRideScreen> {
       circlesSet.add(pickUpCircle);
       circlesSet.add(dropOffCircle);
     });
+  }
+
+  void acceptRideRequest() {
+    String rideRequesterId = widget.rideDetails.rideRequestId;
+
+    newRequestsRef.child(rideRequesterId).child("status").set("accepted");
+    newRequestsRef
+        .child(rideRequesterId)
+        .child("driver_name")
+        .set(driversInformation.name);
+    newRequestsRef
+        .child(rideRequesterId)
+        .child("driver_phone")
+        .set(driversInformation.phone);
+    newRequestsRef
+        .child(rideRequesterId)
+        .child("driver_id")
+        .set(driversInformation.id);
+    newRequestsRef
+        .child(rideRequesterId)
+        .child("car_details")
+        .set("${driversInformation.carColor} - ${driversInformation.carModel}");
+
+    Map locMap = {
+      "latitude": currentPosition.latitude.toString(),
+      "longitude": currentPosition.longitude.toString()
+    };
+
+    newRequestsRef.child(rideRequesterId).child("driver_location").set(locMap);
   }
 }
