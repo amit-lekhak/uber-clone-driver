@@ -23,3 +23,5 @@ StreamSubscription<Position> homeTabPageStreamSubscription;
 final AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer();
 
 Drivers driversInformation;
+
+StreamSubscription<Position> rideStreamSubscription;

@@ -7,6 +7,7 @@ import 'package:driver_app/configMaps.dart';
 import 'package:driver_app/main.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class NewRideScreen extends StatefulWidget {
@@ -33,6 +34,14 @@ class _NewRideScreenState extends State<NewRideScreen> {
 
   double mapBottomPadding = 0.0;
 
+  var geoLocator = Geolocator();
+  var locationOptions =
+      LocationOptions(accuracy: LocationAccuracy.bestForNavigation);
+
+  BitmapDescriptor animatingMarkerIcon;
+
+  Position myPosition;
+
   @override
   void initState() {
     super.initState();
@@ -40,8 +49,49 @@ class _NewRideScreenState extends State<NewRideScreen> {
     acceptRideRequest();
   }
 
+  void createIconMarker() {
+    if (animatingMarkerIcon == null) {
+      ImageConfiguration imageConfiguration =
+          createLocalImageConfiguration(context, size: Size(2, 2));
+
+      BitmapDescriptor.fromAssetImage(imageConfiguration, "images/car_android.png")
+          .then((value) {
+        animatingMarkerIcon = value;
+      });
+    }
+  }
+
+  void getRideLiveLocationUpdates() {
+    rideStreamSubscription =
+        Geolocator.getPositionStream().listen((Position position) {
+     
+      myPosition = position;
+
+      LatLng mPosition = LatLng(position.latitude, position.longitude);
+
+      Marker animatingMarker = Marker(
+        markerId: MarkerId("animating"),
+        position: mPosition,
+        icon: animatingMarkerIcon,
+        infoWindow: InfoWindow(title: "Current Location"),
+      );
+
+      setState(() {
+        CameraPosition cameraPosition =
+            CameraPosition(target: mPosition, zoom: 17);
+        newRideGoogleMapController
+            .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+
+        markersSet.remove((marker) => marker.markerId.value == "animating");
+        markersSet.add(animatingMarker);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    createIconMarker();
+
     return Scaffold(
       body: Stack(
         children: [
@@ -70,6 +120,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
               var pickUpLatLng = widget.rideDetails.pickUp;
 
               await getPlaceDirection(currentLatLng, pickUpLatLng);
+
+              getRideLiveLocationUpdates();
+               
             },
           ),
           Positioned(

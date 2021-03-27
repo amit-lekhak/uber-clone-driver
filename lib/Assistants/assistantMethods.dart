@@ -1,10 +1,10 @@
+import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:driver_app/Assistants/requestAssistant.dart';
 import 'package:driver_app/Models/directionDetails.dart';
 import "package:driver_app/configMaps.dart";
 
 class AssistantMethods {
-  
   // static Future<String> searchCoordinateAddress(
   //     Position position, context) async {
   //   String placeAddress = "";
@@ -36,6 +36,7 @@ class AssistantMethods {
   //   return placeAddress;
   // }
 
+
   static Future<DirectionDetails> obtainPlaceDirectionDetails(
       LatLng initialPosition, LatLng finalPosition) async {
     String directionUrl =
@@ -49,7 +50,7 @@ class AssistantMethods {
 
     directionDetails.encodedPoints = res["routes"][0]["geometry"];
 
-    double distance = res["routes"][0]["legs"][0]["distance"];
+    int distance = (res["routes"][0]["legs"][0]["distance"]).toInt();
     var distanceinKm = (distance / 1000).toStringAsFixed(2);
 
     directionDetails.distanceText = "$distanceinKm km";
@@ -57,7 +58,7 @@ class AssistantMethods {
 
     directionDetails.durationText =
         "${res["routes"][0]["legs"][0]["duration"]} s";
-    directionDetails.durationValue = res["routes"][0]["legs"][0]["duration"];
+    directionDetails.durationValue = (res["routes"][0]["legs"][0]["duration"]).toInt();
 
     return directionDetails;
   }
@@ -84,4 +85,17 @@ class AssistantMethods {
   //     }
   //   });
   // }
+
+  static void disableHomeTabLiveLocationUpdates() {
+    if (homeTabPageStreamSubscription != null) {
+      homeTabPageStreamSubscription.pause();
+    }
+    Geofire.removeLocation(currentFirebaseUser.uid);
+  }
+
+  static void enableHomeTabLiveLocationUpdates() {
+    homeTabPageStreamSubscription.resume();
+    Geofire.setLocation(currentFirebaseUser.uid, currentPosition.latitude,
+        currentPosition.longitude);
+  }
 }

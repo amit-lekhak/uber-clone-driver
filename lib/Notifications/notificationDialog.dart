@@ -1,5 +1,6 @@
 import 'package:driver_app/AllScreens/newRideScreen.dart';
 import 'package:driver_app/AllScreens/registrationScreen.dart';
+import 'package:driver_app/Assistants/assistantMethods.dart';
 import 'package:driver_app/Models/rideDetails.dart';
 import 'package:driver_app/configMaps.dart';
 import 'package:driver_app/main.dart';
@@ -194,6 +195,8 @@ class NotificationDialog extends StatelessWidget {
 
       if (theRideId == rideDetails.rideRequestId) {
         rideRequestRef.set("accepted");
+
+        AssistantMethods.disableHomeTabLiveLocationUpdates();
 
         Navigator.push(
             context,
