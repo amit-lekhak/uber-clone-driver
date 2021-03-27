@@ -36,7 +36,6 @@ class AssistantMethods {
   //   return placeAddress;
   // }
 
-
   static Future<DirectionDetails> obtainPlaceDirectionDetails(
       LatLng initialPosition, LatLng finalPosition) async {
     String directionUrl =
@@ -56,9 +55,16 @@ class AssistantMethods {
     directionDetails.distanceText = "$distanceinKm km";
     directionDetails.distanceValue = distance;
 
-    directionDetails.durationText =
-        "${res["routes"][0]["legs"][0]["duration"]} s";
-    directionDetails.durationValue = (res["routes"][0]["legs"][0]["duration"]).toInt();
+    int seconds = (res["routes"][0]["legs"][0]["duration"]).toInt();
+
+    directionDetails.durationValue = seconds;
+
+    Duration duration = Duration(seconds: seconds);
+
+    String durationText =
+        "${duration.inHours}h:${duration.inMinutes.remainder(60)}m:${(duration.inSeconds.remainder(60))}s";
+
+    directionDetails.durationText = durationText;
 
     return directionDetails;
   }

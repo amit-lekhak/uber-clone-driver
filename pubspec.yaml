@@ -42,6 +42,7 @@ dependencies:
   flutter_geofire:
   firebase_messaging:
   assets_audio_player:
+  maps_toolkit:
 
 dev_dependencies:
   flutter_test:

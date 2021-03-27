@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:driver_app/AllWidgets/progressDialog.dart';
 import 'package:driver_app/Assistants/assistantMethods.dart';
+import 'package:driver_app/Assistants/mapKitAssistant.dart';
 import 'package:driver_app/Models/rideDetails.dart';
 import 'package:driver_app/configMaps.dart';
 import 'package:driver_app/main.dart';
@@ -42,6 +43,10 @@ class _NewRideScreenState extends State<NewRideScreen> {
 
   Position myPosition;
 
+  String status = "accepted";
+  String durationRide = "";
+  bool isRequestingDirection = false;
+
   @override
   void initState() {
     super.initState();
@@ -54,7 +59,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
       ImageConfiguration imageConfiguration =
           createLocalImageConfiguration(context, size: Size(2, 2));
 
-      BitmapDescriptor.fromAssetImage(imageConfiguration, "images/car_android.png")
+      BitmapDescriptor.fromAssetImage(
+              imageConfiguration, "images/car_android.png")
           .then((value) {
         animatingMarkerIcon = value;
       });
@@ -62,17 +68,22 @@ class _NewRideScreenState extends State<NewRideScreen> {
   }
 
   void getRideLiveLocationUpdates() {
+    LatLng oldPos = LatLng(0, 0);
+
     rideStreamSubscription =
         Geolocator.getPositionStream().listen((Position position) {
-     
       myPosition = position;
 
       LatLng mPosition = LatLng(position.latitude, position.longitude);
+
+      var rot = MapKitAssistant.getMarkerRotation(oldPos.latitude,
+          oldPos.longitude, myPosition.latitude, myPosition.longitude);
 
       Marker animatingMarker = Marker(
         markerId: MarkerId("animating"),
         position: mPosition,
         icon: animatingMarkerIcon,
+        rotation: rot,
         infoWindow: InfoWindow(title: "Current Location"),
       );
 
@@ -85,6 +96,21 @@ class _NewRideScreenState extends State<NewRideScreen> {
         markersSet.remove((marker) => marker.markerId.value == "animating");
         markersSet.add(animatingMarker);
       });
+
+      oldPos = mPosition;
+      updateRideDetails();
+
+      String rideRequesterId = widget.rideDetails.rideRequestId;
+
+      Map locMap = {
+        "latitude": currentPosition.latitude.toString(),
+        "longitude": currentPosition.longitude.toString()
+      };
+
+      newRequestsRef
+          .child(rideRequesterId)
+          .child("driver_location")
+          .set(locMap);
     });
   }
 
@@ -122,7 +148,6 @@ class _NewRideScreenState extends State<NewRideScreen> {
               await getPlaceDirection(currentLatLng, pickUpLatLng);
 
               getRideLiveLocationUpdates();
-               
             },
           ),
           Positioned(
@@ -153,7 +178,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
                 child: Column(
                   children: [
                     Text(
-                      "10 mins",
+                      durationRide,
                       style: TextStyle(
                         fontSize: 14.0,
                         fontFamily: "Brand Bold",
@@ -404,5 +429,32 @@ class _NewRideScreenState extends State<NewRideScreen> {
     };
 
     newRequestsRef.child(rideRequesterId).child("driver_location").set(locMap);
+  }
+
+  void updateRideDetails() async {
+    if (isRequestingDirection) return;
+    if (myPosition == null) return;
+
+    isRequestingDirection = true;
+
+    var posLatLng = LatLng(myPosition.latitude, myPosition.longitude);
+    LatLng destinationLatLng;
+
+    if (status == "accepted") {
+      destinationLatLng = widget.rideDetails.pickUp;
+    } else {
+      destinationLatLng = widget.rideDetails.dropOff;
+    }
+
+    var directionDetails = await AssistantMethods.obtainPlaceDirectionDetails(
+        posLatLng, destinationLatLng);
+
+    if (directionDetails != null) {
+      setState(() {
+        durationRide = directionDetails.durationText;
+      });
+    }
+
+    isRequestingDirection = false;
   }
 }
