@@ -11,8 +11,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class AssistantMethods {
-  
-
   static Future<DirectionDetails> obtainPlaceDirectionDetails(
       LatLng initialPosition, LatLng finalPosition) async {
     String directionUrl =
@@ -56,7 +54,6 @@ class AssistantMethods {
     return totalFareAmount.truncate();
   }
 
-
   static void disableHomeTabLiveLocationUpdates() {
     if (homeTabPageStreamSubscription != null) {
       homeTabPageStreamSubscription.pause();
@@ -71,6 +68,8 @@ class AssistantMethods {
   }
 
   static void retireveHistoryInfo(context) {
+    
+
     /** retrieve and display earnings */
     driversRef
         .child(currentFirebaseUser.uid)

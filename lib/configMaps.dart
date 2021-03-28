@@ -27,3 +27,5 @@ Drivers driversInformation;
 StreamSubscription<Position> rideStreamSubscription;
 
 String title = "";
+
+double starCounter = 0.0;
