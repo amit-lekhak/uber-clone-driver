@@ -25,3 +25,5 @@ final AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer();
 Drivers driversInformation;
 
 StreamSubscription<Position> rideStreamSubscription;
+
+String title = "";
