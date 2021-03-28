@@ -1,4 +1,5 @@
 import 'package:driver_app/Assistants/assistantMethods.dart';
+import 'package:driver_app/configMaps.dart';
 import "package:flutter/material.dart";
 
 class CollectFareDialog extends StatelessWidget {
@@ -28,7 +29,7 @@ class CollectFareDialog extends StatelessWidget {
               height: 22.0,
             ),
             Text(
-              "Trip Fare",
+              "Trip Fare (${rideType.toUpperCase()})",
             ),
             SizedBox(
               height: 22.0,

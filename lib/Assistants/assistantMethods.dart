@@ -51,7 +51,17 @@ class AssistantMethods {
 
     double totalFareAmount = timeTravelledFare + distanceTravelledFare;
 
-    return totalFareAmount.truncate();
+    if (rideType == "uber-x") {
+      double result = (totalFareAmount) * 2.0;
+      return result.truncate();
+    } else if (rideType == "uber-go") {
+      return totalFareAmount.truncate();
+    } else if (rideType == "bike") {
+      double result = (totalFareAmount) / 2.0;
+      return result.truncate();
+    } else {
+      return totalFareAmount.truncate();
+    }
   }
 
   static void disableHomeTabLiveLocationUpdates() {
@@ -68,8 +78,6 @@ class AssistantMethods {
   }
 
   static void retireveHistoryInfo(context) {
-    
-
     /** retrieve and display earnings */
     driversRef
         .child(currentFirebaseUser.uid)
