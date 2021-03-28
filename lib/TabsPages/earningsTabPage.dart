@@ -1,3 +1,4 @@
+import 'package:driver_app/AllScreens/historyScreen.dart';
 import 'package:driver_app/DataHandler/appData.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +7,9 @@ class EarningsTabPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String earnings = Provider.of<AppData>(context, listen: false).earnings;
+    String tripsCount =
+        Provider.of<AppData>(context, listen: false).tripsCount.toString();
+
     return Column(
       children: [
         Container(
@@ -38,7 +42,11 @@ class EarningsTabPage extends StatelessWidget {
         FlatButton(
           padding: EdgeInsets.all(0.0),
           onPressed: () {
-            print("GO TO history");
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HistoryScreen(),
+                ));
           },
           child: Padding(
             padding: EdgeInsets.symmetric(
@@ -63,7 +71,7 @@ class EarningsTabPage extends StatelessWidget {
                 Expanded(
                   child: Container(
                     child: Text(
-                      "5",
+                      tripsCount,
                       textAlign: TextAlign.end,
                       style: TextStyle(
                         fontSize: 18.0,
