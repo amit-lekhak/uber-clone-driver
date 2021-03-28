@@ -1,8 +1,12 @@
+import 'package:driver_app/DataHandler/appData.dart';
+import 'package:driver_app/main.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:driver_app/Assistants/requestAssistant.dart';
 import 'package:driver_app/Models/directionDetails.dart';
 import "package:driver_app/configMaps.dart";
+import 'package:provider/provider.dart';
 
 class AssistantMethods {
   // static Future<String> searchCoordinateAddress(
@@ -103,5 +107,19 @@ class AssistantMethods {
     homeTabPageStreamSubscription.resume();
     Geofire.setLocation(currentFirebaseUser.uid, currentPosition.latitude,
         currentPosition.longitude);
+  }
+
+  static void retireveEarningsInfo(context) {
+    driversRef
+        .child(currentFirebaseUser.uid)
+        .child("earnings")
+        .once()
+        .then((DataSnapshot snapshot) {
+      if (snapshot.value != null) {
+        String earnings = snapshot.value.toString();
+
+        Provider.of<AppData>(context, listen: false).updateEarnings(earnings);
+      }
+    });
   }
 }

@@ -1,7 +1,5 @@
 import "package:flutter/material.dart";
 import 'package:flutter_mapbox_autocomplete/flutter_mapbox_autocomplete.dart';
-import 'package:provider/provider.dart';
-import 'package:driver_app/DataHandler/appData.dart';
 import 'package:driver_app/Models/address.dart';
 import 'package:driver_app/configMaps.dart';
 
@@ -16,8 +14,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String placeAddress =
-        Provider.of<AppData>(context).pickUpLocation.placeName;
+    String placeAddress = "";
+    // Provider.of<AppData>(context).pickUpLocation.placeName;
     pickUpTextEditingController.text = placeAddress;
     return Scaffold(
       body: Column(
@@ -191,7 +189,7 @@ class _SearchScreenState extends State<SearchScreen> {
     address.latitude = place.center[1];
     address.longitude = place.center[0];
 
-    Provider.of<AppData>(context, listen: false)
-        .updateDropOffLocationAddress(address);
+    // Provider.of<AppData>(context, listen: false)
+    //     .updateDropOffLocationAddress(address);
   }
 }

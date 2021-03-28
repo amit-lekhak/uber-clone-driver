@@ -1,16 +1,10 @@
-import 'package:flutter/cupertino.dart';
-import 'package:driver_app/Models/address.dart';
+import 'package:flutter/material.dart';
 
 class AppData extends ChangeNotifier {
-  Address pickUpLocation, dropOffLocation;
+  String earnings = "0";
 
-  void updatePickUpLocationAddress(Address pickUpAddress) {
-    pickUpLocation = pickUpAddress;
-    notifyListeners();
-  }
-
-  void updateDropOffLocationAddress(Address dropOffAddress) {
-    dropOffLocation = dropOffAddress;
+  void updateEarnings(String updatedEarnings) {
+    earnings = updatedEarnings;
     notifyListeners();
   }
 }
